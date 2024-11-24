@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/HomePage.dart';
+import 'package:flutter_application_1/pages/EventPage.dart';
 import 'package:flutter_application_1/pages/ProfilePage.dart';
+import 'package:flutter_application_1/pages/TransportPage.dart';
 
 class Loginpage extends StatefulWidget {
+  const Loginpage({super.key});
+
   @override
   State<Loginpage> createState() => _EditProfilState();
 }
@@ -9,6 +14,7 @@ class Loginpage extends StatefulWidget {
 class _EditProfilState extends State<Loginpage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +31,10 @@ class _EditProfilState extends State<Loginpage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                child: Center(
+                child: const Center(
                   child: Text(
                     'LOGIN',
-                    style: TextStyle(fontSize: 40, color: Colors.blueAccent),
+                    style: TextStyle(fontSize: 40, color: Colors.black),
                   ),
                 ),
               ),
@@ -44,10 +50,22 @@ class _EditProfilState extends State<Loginpage> {
               Container(
                 child: TextField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
+                  obscureText: !_isPasswordVisible,
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      )),
                 ),
               ),
               SizedBox(
@@ -59,18 +77,18 @@ class _EditProfilState extends State<Loginpage> {
                       showAlertDialogMaterial(context, 'Please input username');
                     } else if (passwordController.text.isEmpty) {
                       showAlertDialogMaterial(context, 'Please input password');
-                    } else {
+                    } else if (nameController.text == 'irenaaudri' &&
+                        passwordController.text == 'irena') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => Profilepage(
-                                  name: nameController.text,
-                                )
-                        ),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                       );
+                    } else {
+                      showAlertDialogMaterial(
+                          context, 'Invalid username or password');
                     }
                   },
-                  child: Text(
+                  child: const Text(
                     'Login',
                     style: TextStyle(
                       color: Colors.white,
@@ -84,37 +102,26 @@ class _EditProfilState extends State<Loginpage> {
     );
   }
 
-  void showAlertDialogMaterial(
-    BuildContext context,
-    String text,
-  ) {
+  void showAlertDialogMaterial(BuildContext context, String text) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Info'),
+          title: const Text('Info'),
           content: Text(text),
           actions: [
             TextButton(
-              child: Text('No!'),
+              child: const Text('OK'),
               onPressed: () {
-                print('Clicked No!');
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Yes'),
-              onPressed: () {
-                print('Clicked Yes!');
                 Navigator.of(context).pop();
               },
             ),
           ],
           elevation: 4,
-          backgroundColor: Colors.red[200],
+          backgroundColor: Color(0xFF4CC9FE),
         );
       },
-      barrierColor: Colors.red[100],
+      barrierColor: Colors.black54,
       barrierDismissible: false,
     );
   }
